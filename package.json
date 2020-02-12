@@ -3,10 +3,36 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mayowa-Ojo/ajebo-product-tracker.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev-start": "nodemon server.js"
+  },
+  "keywords": [
+    "scraping",
+    "track",
+    "products",
+    "sneakers"
+  ],
+  "author": {
+    "name": "Mayowa Ojo",
+    "email": "mayowaojo.e@gmail.com",
+    "url": "https://mayowa-ojo.github.io"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "express": "^4.17.1",
+    "helmet": "^3.21.2",
+    "mongoose": "^5.8.11"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "mocha": "^7.0.1",
+    "nodemon": "^2.0.2"
+  }
 }
