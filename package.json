@@ -10,7 +10,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "dev-start": "nodemon server.js"
+    "dev": "nodemon server.js"
   },
   "keywords": [
     "scraping",
@@ -28,7 +28,9 @@
     "cheerio": "^1.0.0-rc.3",
     "express": "^4.17.1",
     "helmet": "^3.21.2",
-    "mongoose": "^5.8.11"
+    "mongoose": "^5.8.11",
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.8"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
