@@ -29,6 +29,7 @@
     "express": "^4.17.1",
     "helmet": "^3.21.2",
     "mongoose": "^5.8.11",
+    "puppeteer": "^2.1.1",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.8"
   },
