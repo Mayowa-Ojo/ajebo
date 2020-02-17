@@ -1,14 +1,31 @@
-const request = require('request')
-const rpn = require('request-promise-native')
-const cheerio = require('cheerio')
+const puppeteer = require('puppeteer');
 
-const { log } = console
-const URL = 'https://google.com'
+const URL = "https://ajebomarket.com/shoes/sneakers";
+const { log } = console;
 
-rpn(URL)
-   .then(html => {
-      log(html)
-   })
-   .catch(err => {
-      log(err)
-   })
+(async () => {
+   const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+   });
+
+   console.log(await browser.version());
+
+   // open a new page
+   const page = await browser.newPage();
+
+   // load url
+   await page.goto(URL);
+
+   const html = await page.evaluate(() => {
+      const sneakers = []
+      document.querySelectorAll('.product-item-details > strong.name').forEach(sneaker => {
+         sneakers.push({id: 1, name: sneaker.inenrText})
+      })
+      
+      return sneaker_name;
+   });
+
+   log(await html);
+
+   await browser.close();
+})();
