@@ -6,7 +6,9 @@ const app = express()
 const PORT = process.env.PORT
 const NODE_ENV = process.env.NODE_ENV
 
-require('./utils/scraper')
+require('./config/database-config')
+// require('./utils/scraper')
+
 
 app.get('/', (req, res) => {
    res.json({
