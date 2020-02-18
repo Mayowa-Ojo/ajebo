@@ -14,16 +14,54 @@ const { log } = console;
    const page = await browser.newPage();
 
    // load url
-   await page.goto(URL);
+   await page.goto(URL, {waitUntil: "networkidle0"});
 
-   const html = await page.evaluate(() => {
-      const sneakers = []
-      document.querySelectorAll('.product-item-details > strong.name').forEach(sneaker => {
-         sneakers.push({id: 1, name: sneaker.inenrText})
-      })
+   const selectors = {
+      sizes: '.product-item-details > div:nth-child(3)',
+      names: '.product-item-details > strong.name'
+   }
+
+   await page.waitForSelector(selectors.sizes);
+
+   const html = await page.evaluate((selectors) => {
+      // document.querySelector("[data-product-id='16750']")
       
-      return sneaker_name;
-   });
+      function getSneakerInfo() {
+         const sneakers = [];
+         
+         // get sneaker sizes
+         const iterable_one = Array.from(document.querySelectorAll(selectors.sizes));
+
+         iterable_one.map((el) => {
+            const sneaker = {};
+            const sizes = [];
+            const iterable_two = Array.from(el.children[0].querySelector('.swatch-attribute-options').querySelectorAll('.swatch-option'));
+            const productId = el.previousElementSibling.getAttribute('data-product-id');
+
+            iterable_two.map(el => {
+               sizes.push(el.innerText.trim());
+            });
+
+            sneaker['id'] = productId;
+            sneaker['sizes'] = sizes;
+            sneakers.push(sneaker);
+         });
+
+         // get sneaker name
+         const iterable_three = Array.from(document.querySelectorAll(selectors.names));
+         
+         iterable_three.map((el) => {
+            const currentId = el.nextElementSibling.getAttribute('data-product-id')
+            
+            const targetIndex = sneakers.findIndex(sneaker => sneaker.id == currentId)
+            sneakers[targetIndex]['name'] = el.innerText.trim()
+         })
+
+         return sneakers;
+      }
+
+      return getSneakerInfo();
+   }, selectors);
 
    log(await html);
 
