@@ -1,8 +1,8 @@
-const mongoose = require('mongoose')
-require('dotenv').config()
+const mongoose = require('mongoose');
+require('dotenv').config();
 
 // globals
-const DATABASE_URI = process.env.DATABASE_URI
+const DATABASE_URI = process.env.DATABASE_URI;
 
 // setup mongoose connection
 
@@ -11,4 +11,4 @@ mongoose.connect(DATABASE_URI, {
    useUnifiedTopology: true
 })
    .then(() => console.log('connected to database'))
-   .catch(err => console.error(err))
+   .catch(err => console.error(err));
