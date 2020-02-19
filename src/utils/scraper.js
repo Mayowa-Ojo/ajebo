@@ -5,7 +5,7 @@ require('dotenv').config()
 const URL = process.env.TARGET_URL;
 const { log } = console;
 
-(async () => {
+exports.scrapeURL = async () => {
    const browser = await puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox']
    });
@@ -65,7 +65,9 @@ const { log } = console;
       return getSneakerInfo();
    }, selectors);
 
-   log(await html);
-
+   
    await browser.close();
-})();
+   return html;
+};
+
+module.exports = exports;
