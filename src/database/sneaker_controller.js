@@ -1,7 +1,7 @@
 const Sneaker = require('./sneaker_model');
 
 /**
- * 
+ * get sneakers
  */
 exports.getSneakers = async function(req, res) {
    try {
@@ -13,7 +13,7 @@ exports.getSneakers = async function(req, res) {
 };
 
 /**
- * 
+ * create sneaker
  * 
  */
 exports.createSneaker = async function(req, res) {
@@ -30,6 +30,13 @@ exports.createSneaker = async function(req, res) {
    } catch(err) {
       console.error(err)
    };
+};
+
+/**
+ * update sneaker
+ */
+exports.updateSneaker = async function(req, res) {
+
 };
 
 module.exports = exports;
