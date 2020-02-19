@@ -8,8 +8,9 @@ const PORT = process.env.PORT;
 const NODE_ENV = process.env.NODE_ENV;
 
 require('./config/database_config');
-// require('./utils/scraper').scrapeURL()
-// require('./database/seed')
+// require('./utils/scraper').scrapeURL();
+// require('./database/seed');
+// require('./jobs/cron');
 
 app.get('/', (req, res) => {
    res.json({
