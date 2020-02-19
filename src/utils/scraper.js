@@ -1,6 +1,8 @@
 const puppeteer = require('puppeteer');
+require('dotenv').config()
 
-const URL = "https://ajebomarket.com/shoes/sneakers";
+// globals
+const URL = process.env.TARGET_URL;
 const { log } = console;
 
 (async () => {
