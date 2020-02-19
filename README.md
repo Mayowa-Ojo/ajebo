@@ -11,13 +11,16 @@
 * Email Automation - Mailchimp
 
 ### TASKS
-[x] Scaffold application
-[x] Install dependencies
-[x] Initialize git
-[x] Setup express server
-[x] Setup config files
-[x] Connect to database server
-[x] Create scraper function
-[x] Create database model and controller
-[ ] Setup task scheduler 
-[ ]
+- [x] Scaffold application
+- [x] Install dependencies
+- [x] Initialize git
+- [x] Setup express server
+- [x] Setup config files
+- [x] Connect to database server
+- [x] Create scraper function
+- [x] Create database model and controller
+- [x] Implement CRUD functions
+- [ ] Setup task scheduler
+- [ ] Setup email automation
+- [ ] Write suitable tests
+- [ ] Deploy to production
