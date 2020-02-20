@@ -6,7 +6,7 @@ const Sneaker = require('./sneaker_model');
 exports.getSneakers = async function(req, res) {
    try {
       const sneakers = await Sneaker.find();
-      console.log(sneakers);
+      return sneakers
    } catch(err) {
       console.error(err)
    };
