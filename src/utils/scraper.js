@@ -44,7 +44,7 @@ exports.scrapeURL = async () => {
                sizes.push(el.innerText.trim());
             });
 
-            sneaker['id'] = productId;
+            sneaker['productId'] = productId;
             sneaker['sizes'] = sizes;
             sneakers.push(sneaker);
          });
@@ -55,7 +55,7 @@ exports.scrapeURL = async () => {
          iterable_three.map((el) => {
             const currentId = el.nextElementSibling.getAttribute('data-product-id')
             
-            const targetIndex = sneakers.findIndex(sneaker => sneaker.id == currentId)
+            const targetIndex = sneakers.findIndex(sneaker => sneaker.productId == currentId)
             sneakers[targetIndex]['name'] = el.innerText.trim()
          })
 
