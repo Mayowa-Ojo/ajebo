@@ -1,5 +1,4 @@
 const express = require('express');
-const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
@@ -8,10 +7,11 @@ const PORT = process.env.PORT;
 const NODE_ENV = process.env.NODE_ENV;
 
 require('./config/database_config');
-require('./utils/check_diff').checkDiff();
+// require('./utils/check_diff').checkDiff()
 // require('./utils/scraper').scrapeURL();
 // require('./database/seed');
 // require('./jobs/cron');
+require('./utils/mail');
 
 app.get('/', (req, res) => {
    res.json({
