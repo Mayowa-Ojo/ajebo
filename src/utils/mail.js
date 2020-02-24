@@ -4,9 +4,9 @@ const config = require('../config/nodemailer_config');
 require('dotenv').config();
 
 // globals
-const SMTP_HOST=process.env.SMTP_HOST;
-const SMTP_USER=process.env.SMTP_USER;
-const SMTP_PASS=process.env.SMTP_PASS;
+const SMTP_HOST=process.env.SMTP_HOST_TEST;
+const SMTP_USER=process.env.SMTP_USER_TEST;
+const SMTP_PASS=process.env.SMTP_PASS_TEST;
 const SMTP_PORT=process.env.SMTP_PORT;
 // const SMTP_DEBUG=process.env.SMTP_DEBUG;
 // const SMTP_LOGGER=process.env.SMTP_LOGGER;
