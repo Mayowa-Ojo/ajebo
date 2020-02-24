@@ -20,9 +20,11 @@
 - [x] Create scraper function
 - [x] Create database model and controller
 - [x] Implement CRUD functions
-- [ ] Load database with mock data
-- [ ] Manually test tracking process with mock data
-- [ ] Setup email automation
-- [ ] Setup task scheduler
+- [x] Load database with mock data
+- [x] Manually test tracking process with mock data
+- [x] Setup email automation
+- [x] Setup task scheduler
+- [ ] Create CLI tool for running database updates
+- [ ] Load database with realtime data
 - [ ] Write suitable tests
 - [ ] Deploy to production
