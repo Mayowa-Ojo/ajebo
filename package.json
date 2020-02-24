@@ -29,6 +29,7 @@
     "cron": "^1.8.2",
     "express": "^4.17.1",
     "helmet": "^3.21.2",
+    "inquirer": "^7.0.4",
     "mongoose": "^5.8.11",
     "nodemailer": "^6.4.2",
     "puppeteer": "^2.1.1",
