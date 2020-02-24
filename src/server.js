@@ -7,11 +7,7 @@ const PORT = process.env.PORT;
 const NODE_ENV = process.env.NODE_ENV;
 
 require('./config/database_config');
-// require('./utils/check_diff').checkDiff()
-// require('./utils/scraper').scrapeURL();
-// require('./database/seed');
-// require('./jobs/cron');
-require('./utils/mail');
+require('./jobs/cron');
 
 app.get('/', (req, res) => {
    res.json({
