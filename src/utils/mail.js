@@ -1,5 +1,4 @@
 // handle email functionality
-
 const nodemailer = require('nodemailer');
 const config = require('../config/nodemailer_config');
 require('dotenv').config();
@@ -12,7 +11,7 @@ const SMTP_PORT=process.env.SMTP_PORT;
 // const SMTP_DEBUG=process.env.SMTP_DEBUG;
 // const SMTP_LOGGER=process.env.SMTP_LOGGER;
 
-const message = {
+const sampleMessage = {
    from: '"Ajebo Tracker[bot]" <mayowaojo.e@gmail.com>',
    to: '"Mayowa Ojo" <ojomayowa.e@gmail.com>',
    subject: 'Test',
@@ -32,12 +31,19 @@ transporter.verify((err, success) => {
    console.log('server ready for messages...');
 });
 
-transporter.sendMail(message, (err, info) => {
-   if(err) {
-      console.log(`Oops! something went wrong: ${err.message}`);
-      return;
-   }
+exports.sendMail = function({from, to, subject, text, html}) {
+   const message = {from, to, subject, text, html}
+   transporter.sendMail(message, (err, info) => {
+      if(err) {
+         console.log(`Oops! something went wrong: ${err.message}`);
+         return;
+      }
+      
+      console.log("Message sent %s: ", info.messageId);
+      console.log("Preview URL %s: ", nodemailer.getTestMessageUrl(info));
 
-   console.log("Message sent %s: ", info.messageId);
-   console.log("Preview URL %s: ", nodemailer.getTestMessageUrl(info));
-});
+      return;
+   });
+}
+
+module.exports = exports;
