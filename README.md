@@ -8,7 +8,7 @@
 * Headless Browser - Puppeteer
 * Database - MongoDB
 * ODM - Mongoose
-* Email Automation - Mailchimp
+* Email Automation - Nodemailer + Sendgrid
 
 ### TASKS
 - [x] Scaffold application
@@ -24,7 +24,7 @@
 - [x] Manually test tracking process with mock data
 - [x] Setup email automation
 - [x] Setup task scheduler
-- [ ] Create CLI tool for running database updates
 - [ ] Load database with realtime data
+- [ ] Create CLI tool for running database updates
 - [ ] Write suitable tests
 - [ ] Deploy to production
