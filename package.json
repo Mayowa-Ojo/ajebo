@@ -10,7 +10,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "cli": "node src/cli/cli.js"
   },
   "keywords": [
     "scraping",
@@ -25,6 +26,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "chalk": "^3.0.0",
     "cheerio": "^1.0.0-rc.3",
     "cron": "^1.8.2",
     "express": "^4.17.1",
