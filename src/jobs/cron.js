@@ -4,7 +4,7 @@ const { checkDiff } = require('../utils/check_diff');
 const { generateHtml } = require('../utils/utils');
 
 // globals
-const cronJob = new cron.CronJob('0 */1 * * * *', function() {
+const cronJob = new cron.CronJob('0 0 */1 * * *', function() {
 
    const rawHtml = `
    <h3>New Update from AJebo Tracker</h3>
