@@ -1,6 +1,10 @@
 const express = require('express');
 const helmet = require('helmet');
-require('dotenv').config();
+
+// check Node env
+if(process.env.NODE_ENV !== 'production') {
+   require('dotenv').config();
+}
 
 const app = express();
 // Globals
@@ -12,13 +16,15 @@ app.use(helmet());
 require('./config/database_config');
 require('./jobs/cron');
 
+app.get('/scrape', (req, res) => {
+
+   require('./utils/scraper').scrapeURL()
+      .then(data => res.json(data))
+      .catch(err => res.status(400).json({message: err.message}));
+})
+
 app.get('/', (req, res) => {
-   res.json({
-      name: 'John Doe',
-      age: 34,
-      occupation: 'UI desginer',
-      gender: 'M'
-   });
+   res.send('Welcome to Ajebo - Bot Tracker for e-commerce')
 });
 
 
