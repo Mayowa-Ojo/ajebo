@@ -46,7 +46,7 @@ exports.createSneaker = async function() {
 /**
  * update sneaker
  */
-exports.updateSneaker = async function() {
+exports.updateSneaker = async function(id, update) {
 
 };
 
