@@ -1,19 +1,28 @@
 const inquirer = require('inquirer');
+const { getSneakers } = require('../database/sneaker_controller');
 
+require('../config/database_config');
+// globals
 const args = process.argv.slice(2);
 
 const glyphs = {
-   search: '',
+   search: '',
    arrow: '',
-   edit: '',
-   cli: ''
+   edit: '',
+   cli: '',
+   database: '',
+   delete: '',
+   update: '',
+   browser: '',
+   info: ''
 }
+
 const questions = {
    step_one: [
       {
          name: 'welcome',
          type: 'input',
-         message: `Welcome to Ajebo cli [v1.0] ${glyphs.cli}\n Enter -h for help or -list for a list of available commands: \n ${glyphs.arrow}`
+         message: `${glyphs.info} Welcome to Ajebo cli [v1.0] ${glyphs.cli}\n Enter -h for help or -list for a list of available commands: \n ${glyphs.arrow}`
       }
    ],
    step_two: [
@@ -21,7 +30,7 @@ const questions = {
          name: 'route',
          type: 'list',
          message: 'Select which route you\'d like to take: ',
-         choices: ['run database query', 'launch headless browser'],
+         choices: [`run database query ${glyphs.database}`, `launch headless browser ${glyphs.browser}`],
          default: 'database query'
       }
    ],
@@ -30,7 +39,7 @@ const questions = {
          name: 'route_one',
          type: 'list',
          message: 'Select an operation',
-         choices: ['create', `read ${glyphs.search}`, 'update', 'delete'],
+         choices: [`create ${glyphs.edit}`, `read ${glyphs.search}`, `update ${glyphs.update}`, `delete ${glyphs.delete}`],
          default: 'read'
       },
       {
@@ -79,25 +88,28 @@ const questions = {
 };
 
 prompt(questions.step_one, function(answers) {
+
    if(answers.welcome == '-list') {
       // list available commands
       prompt(questions.step_two, function(answers) {
-         if(answers.route == 'run database query') {
+
+         if(answers.route.includes('run database query')) {
             // prompt user to select database query
             prompt(questions.step_three[0], function(answers) {
-               switch(answers.route_one) {
-                  case 'create':
+               const { route_one } = answers;
+               switch(Boolean(route_one)) {
+                  case route_one.includes('create'):
                      console.log('inserting into database...');
                      break;
-                  case 'read':
+                  case route_one.includes('read'):
                      // console.log('reading database...')
                      readDatabase(questions.step_four);
                      break;
-                  case 'update':
+                  case route_one.includes('update'):
                      // console.log('updating database item...')
                      updateDatabase(questions.step_four);
                      break;
-                  case 'delete':
+                  case route_one.includes('delete'):
                      console.log('deleting database item...');
                      break;
                }
@@ -117,18 +129,15 @@ prompt(questions.step_one, function(answers) {
 function readDatabase({read}) {
 
    prompt(read[0], function(answers) {
-      if(answers.read == 'find_one') {
+      if(answers.read.includes('find_one')) {
          prompt(read[1], function(answers) {
-            console.log(
-               JSON.stringify(
-                  {
-                     _id: 'abnbdyt274672783t76y',
-                     name: 'Adidas FOG | Black',
-                     sizes: ['42', '44'],
-                     productId: answers.find_one
-                  }
-               )
-            );
+            console.log(`id: ${answers.find_one}`);
+         });
+      } else {
+         console.log('fetching data...')
+         getSneakers().then(res => {
+            console.log(res);
+            return;
          });
       }
    });
