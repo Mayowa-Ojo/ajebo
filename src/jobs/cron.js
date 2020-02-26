@@ -35,7 +35,7 @@ const cronJob = new cron.CronJob('0 0 */1 * * *', function() {
 
    checkDiff().then(res => {
       // generate dynamic html using tagged templates
-      const html = generateHtml`${res} ${rawHtml}`
+      const html = generateHtml`${res} ${rawHtml}`;
       const message = {
          from: '"Ajebo Tracker[bot 🤖️]" <mayowaojo.e@gmail.com>',
          to: '"Mayowa Ojo" <ojomayowa.e@gmail.com>',
