@@ -1,4 +1,5 @@
 const inquirer = require('inquirer');
+const ora = require('ora');
 const { getSneakers } = require('../database/sneaker_controller');
 
 require('../config/database_config');
@@ -134,9 +135,12 @@ function readDatabase({read}) {
             console.log(`id: ${answers.find_one}`);
          });
       } else {
-         console.log('fetching data...')
+         // console.log('fetching data...')
+         
          getSneakers().then(res => {
             console.log(res);
+            const [spinner, stop] = loadingSpinner('Fetching data...', 'dots', 'yellow', true);
+            stop(spinner);
             return;
          });
       }
@@ -155,4 +159,17 @@ function prompt(question, callback) {
    return inquirer.prompt(question).then(answers => {
       callback(answers);
    });
+};
+
+function loadingSpinner(text, spinner, color, prefix) {
+   let start;
+   let stop = (instance) => setTimeout(() => {instance.succeed()}, 1000);
+   
+   if(prefix) {
+      start = ora({prefixText: text, color, spinner}).start();
+      return [start, stop];
+   }
+
+   start = ora({text, color, spinner}).start();
+   return [start, stop];
 };
