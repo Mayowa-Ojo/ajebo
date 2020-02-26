@@ -1,5 +1,9 @@
 const puppeteer = require('puppeteer');
-require('dotenv').config()
+
+// check node env
+if(process.env.NODE_ENV !== 'production') {
+   require('dotenv').config();
+}
 
 // globals
 const URL = process.env.TARGET_URL;

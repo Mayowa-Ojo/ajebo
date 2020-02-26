@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
+
+// check node env
+if(process.env.NODE_ENV !== 'production') {
+   require('dotenv').config();
+}
 
 // globals
 const { 

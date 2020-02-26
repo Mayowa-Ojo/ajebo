@@ -1,7 +1,11 @@
 // handle email functionality
 const nodemailer = require('nodemailer');
 const config = require('../config/nodemailer_config');
-require('dotenv').config();
+
+// check node env
+if(process.env.NODE_ENV !== 'production') {
+   require('dotenv').config();
+}
 
 // globals
 const SMTP_HOST=process.env.SMTP_HOST_TEST;

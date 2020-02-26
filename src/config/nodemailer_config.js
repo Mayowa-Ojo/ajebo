@@ -1,5 +1,4 @@
 // configuration message
-require('dotenv').config();
 
 // globals
 
