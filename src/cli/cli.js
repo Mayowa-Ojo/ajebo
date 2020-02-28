@@ -161,9 +161,9 @@ function prompt(question, callback) {
    });
 };
 
-function loadingSpinner(text, spinner, color, prefix) {
+function loadingSpinner(text, spinner, color, prefix, successMsg) {
    let start;
-   let stop = (instance) => setTimeout(() => {instance.succeed()}, 1000);
+   let stop = (instance) => setTimeout(() => {instance.succeed(successMsg)}, 1000);
    
    if(prefix) {
       start = ora({prefixText: text, color, spinner}).start();
