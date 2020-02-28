@@ -7,7 +7,7 @@ const { generateHtml } = require('../utils/utils');
 const cronJob = new cron.CronJob('0 0 */1 * * *', function() {
 
    const rawHtml = `
-   <h3>New Update from AJebo Tracker</h3>
+   <h3>New Update from Ajebo Tracker 🤖️</h3>
    *
    <p>Hi Mayowa, I found some changes in sneaker sizes since last update. Details below</p>
    *
@@ -37,7 +37,7 @@ const cronJob = new cron.CronJob('0 0 */1 * * *', function() {
       // generate dynamic html using tagged templates
       const html = generateHtml`${res} ${rawHtml}`;
       const message = {
-         from: '"Ajebo Tracker[bot 🤖️]" <mayowaojo.e@gmail.com>',
+         from: '"Ajebo Tracker[bot]" <mayowaojo.e@gmail.com>',
          to: '"Mayowa Ojo" <ojomayowa.e@gmail.com>',
          subject: 'Notifier: I found changes',
          text: `Placeholder text - error occured generating html`,
