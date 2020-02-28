@@ -24,7 +24,9 @@
 - [x] Manually test tracking process with mock data
 - [x] Setup email automation
 - [x] Setup task scheduler
-- [ ] Load database with realtime data
-- [ ] Create CLI tool for running database updates
+- [x] Load database with realtime data
+- [x] Test app in production env
+- [ ] Create CLI tool for running database updates --in progress
+- [ ] Abstract heavy tasks to message queues
 - [ ] Write suitable tests
 - [ ] Deploy to production
