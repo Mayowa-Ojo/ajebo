@@ -19,5 +19,5 @@ exports.generateHtml = function(_, data, rawHtml) {
 
       htmlToArray.splice(htmlToArray.length-1, 0, row);
    });
-   return htmlToArray.join();
+   return htmlToArray.join('');
 };
