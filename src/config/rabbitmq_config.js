@@ -1,27 +1,34 @@
-const amqp = require('amqplib/callback_api')
+const amqp = require('amqplib/callback_api');
 
 // check node env
 if(process.env.NODE_ENV !== 'production') {
-   require('dotenv')
+   require('dotenv');
 }
 
 const { RABBITMQ_URL } = process.env;
 
 // connect to RabbitMQ
-const connect_rmq = () => {
+const connect_rmq = (callback) => {
    
-   return amqp.connect(RABBITMQ_URL, (err, connection) => {
+   amqp.connect(RABBITMQ_URL, (err, connection) => {
       if(err) {
-         console.error(`-- RabbitMQ: Error establishing connection: ${err.message} \n-- Retrying in 5s...`);
-         setTimeout(() => {
-            console.log('-- RabbitMQ: Retrying...')
-            connect_rmq();
-         }, 10000);
-         return;
+        return panic(err, connection);
       }
       console.log('-- RabbitMQ: connected...');
-      return connection;
+
+      callback(connection);
    });
 };
 
-module.exports = connect_rmq;
+const panic = (err, connection) => {
+   console.error(`-- RabbitMQ: Error occured - ${err.message}`);
+   if(connection) {
+      connection.close(() => process.exit(1));
+   }
+
+};
+
+exports.connect_rmq = connect_rmq;
+exports.panic = panic;
+
+module.exports = exports;
