@@ -13,8 +13,12 @@ const NODE_ENV = process.env.NODE_ENV;
 
 app.use(helmet());
 
+// connect to RabbitMQ and start consumer
+require('./workers/consumer');
+
+
 require('./config/database_config');
-require('./jobs/cron');
+// require('./jobs/cron');
 
 app.get('/scrape', (req, res) => {
 
@@ -29,5 +33,5 @@ app.get('/', (req, res) => {
 
 
 app.listen(PORT, () => {
-   console.log(`server started in ${NODE_ENV} on port: ${PORT}`);
+   console.log(`-- Server: listening in ${NODE_ENV} on port: ${PORT}`);
 });

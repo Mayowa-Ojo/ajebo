@@ -32,7 +32,7 @@ const transporter = nodemailer.createTransport(config.smtpConfig(
 transporter.verify((err, success) => {
    if(err) throw new Error(err);
 
-   console.log('server ready for messages...');
+   console.log('-- Nodemailer: listening for for messages...');
 });
 
 exports.sendMail = function({from, to, subject, text, html}) {
