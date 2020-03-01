@@ -26,7 +26,7 @@
 - [x] Setup task scheduler
 - [x] Load database with realtime data
 - [x] Test app in production env
-- [ ] Create CLI tool for running database updates --in progress
-- [ ] Abstract heavy tasks to workers - setup RabbitMq and amqp
+- [x] Abstract heavy tasks to workers - setup RabbitMq with amqp
+- [*] Create CLI tool for running database updates --in progress
 - [ ] Write suitable tests
 - [ ] Deploy to production
