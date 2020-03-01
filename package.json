@@ -26,6 +26,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "amqplib": "^0.5.5",
     "chalk": "^3.0.0",
     "cheerio": "^1.0.0-rc.3",
     "cron": "^1.8.2",
