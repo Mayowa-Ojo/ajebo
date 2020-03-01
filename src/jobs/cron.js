@@ -4,8 +4,14 @@ const { checkDiff } = require('../utils/check_diff');
 const { generateHtml } = require('../utils/utils');
 
 // globals
-const cronJob = new cron.CronJob('0 0 */1 * * *', function() {
+const cronJob = new cron.CronJob('0 */2 * * * *', function() {
+   // publish task to consumer every <x> hours/mins
+   require('../workers/publisher');
+}, null, true, 'America/Los_Angeles');
 
+cronJob.start();
+
+module.exports = runCron = () => {
    const rawHtml = `
    <h3>New Update from Ajebo Tracker 🤖️</h3>
    *
@@ -33,24 +39,25 @@ const cronJob = new cron.CronJob('0 0 */1 * * *', function() {
    </table>
    `;
 
-   checkDiff().then(res => {
-      // generate dynamic html using tagged templates
-      const html = generateHtml`${res} ${rawHtml}`;
-      const message = {
-         from: '"Ajebo Tracker[bot]" <mayowaojo.e@gmail.com>',
-         to: '"Mayowa Ojo" <ojomayowa.e@gmail.com>',
-         subject: 'Notifier: I found changes',
-         text: `Placeholder text - error occured generating html`,
-         html
-      };
-      // console.log(res.length)
-      if(res.length > 0) {
-         // send email if check diff function returns changes
-         sendMail(message);
-         return;
-      } return;
-   })
-   .catch(err => console.error(err));
-}, null, true, 'America/Los_Angeles');
+   return Promise.resolve(
+      checkDiff().then(res => {
+         // generate dynamic html using tagged templates
+         const html = generateHtml`${res} ${rawHtml}`;
+         const message = {
+            from: '"Ajebo Tracker[bot]" <mayowaojo.e@gmail.com>',
+            to: '"Mayowa Ojo" <ojomayowa.e@gmail.com>',
+            subject: 'Notifier: I found changes',
+            text: `Placeholder text - error occured generating html`,
+            html
+         };
+         // console.log(res.length)
+         if(res.length > 0) {
+            // send email if check diff function returns changes
+            sendMail(message);
+            return;
+         } return;
+      })
+      .catch(err => console.error(err))
+   )
 
-cronJob.start();
+};
