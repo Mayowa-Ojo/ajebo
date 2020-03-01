@@ -13,12 +13,11 @@ const NODE_ENV = process.env.NODE_ENV;
 
 app.use(helmet());
 
+require('./config/database_config');
 // connect to RabbitMQ and start consumer
 require('./workers/consumer');
-
-
-require('./config/database_config');
-// require('./jobs/cron');
+// start cron job
+require('./jobs/cron');
 
 app.get('/scrape', (req, res) => {
 
