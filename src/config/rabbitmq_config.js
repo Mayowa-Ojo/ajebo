@@ -5,12 +5,13 @@ if(process.env.NODE_ENV !== 'production') {
    require('dotenv');
 }
 
-const { RABBITMQ_URL } = process.env;
+// const { LOCALAMQP_URL: URI } = process.env;
+const URI = process.env.CLOUDAMQP_URL != 'undefined' ? process.env.CLOUDAMQP_URL : process.env.LOCALAMQP_URL;
 
 // connect to RabbitMQ
 const connect_rmq = (callback) => {
    
-   amqp.connect(RABBITMQ_URL, (err, connection) => {
+   amqp.connect(URI, (err, connection) => {
       if(err) {
         return panic(err, connection);
       }
