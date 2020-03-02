@@ -19,11 +19,11 @@ require('./workers/consumer');
 // start cron job
 require('./jobs/cron');
 
-app.get('/scrape', (req, res) => {
-
-   require('./utils/scraper').scrapeURL()
-      .then(data => res.json(data))
-      .catch(err => res.status(400).json({message: err.message}));
+app.get('/scrape', (_req, res) => {
+   // send message to consumer
+   // TODO: figure out how to respond with returned data
+      // - potential solution - use sockets to listen for events
+   require('./workers/publisher')({ consumerType: 'request', res });
 })
 
 app.get('/', (req, res) => {
