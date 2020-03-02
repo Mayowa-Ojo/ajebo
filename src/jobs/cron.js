@@ -4,9 +4,9 @@ const { checkDiff } = require('../utils/check_diff');
 const { generateHtml } = require('../utils/utils');
 
 // globals
-const cronJob = new cron.CronJob('0 */2 * * * *', function() {
+const cronJob = new cron.CronJob('0 0 */6 * * *', function() {
    // publish task to consumer every <x> hours/mins
-   require('../workers/publisher');
+   require('../workers/publisher')({ consumerType: 'cron' });
 }, null, true, 'America/Los_Angeles');
 
 cronJob.start();
