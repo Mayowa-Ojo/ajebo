@@ -19,6 +19,9 @@ require('./workers/consumer');
 // start cron job
 require('./jobs/cron');
 
+// start wake-dyno cron
+require('./jobs/wake_dyno');
+
 app.get('/scrape', (_req, res) => {
    // send message to consumer
    // TODO: figure out how to respond with returned data
