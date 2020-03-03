@@ -27,7 +27,7 @@ app.get('/scrape', (_req, res) => {
 })
 
 app.get('/', (req, res) => {
-   res.send('Welcome to Ajebo - Bot Tracker for e-commerce')
+   res.send('Welcome to Ajebo 🤖️ - Bot Tracker for e-commerce')
 });
 
 
