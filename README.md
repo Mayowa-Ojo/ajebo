@@ -8,7 +8,10 @@
 * Headless Browser - Puppeteer
 * Database - MongoDB
 * ODM - Mongoose
+* Message Queue - RabbitMQ
 * Email Automation - Nodemailer + Sendgrid
+* CLI tool - Inquirer
+* Cloud PaaS - Heroku
 
 ### TASKS
 - [x] Scaffold application
