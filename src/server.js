@@ -32,6 +32,9 @@ app.get('/scrape', (_req, res) => {
       });
 
    // -------------------------------------------------
+   // handling this route with a barebones http request bring about some inefficiency
+   // one solution is to use workers, but there are some caveats:
+   
    // send message to consumer
    // TODO: figure out how to respond with returned data
       // - potential solution - use sockets to listen for events
