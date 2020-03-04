@@ -47,7 +47,17 @@ exports.createSneaker = async function() {
  * update sneaker
  */
 exports.updateSneaker = async function(id, update) {
+   try {
+      await Sneaker.findByIdAndUpdate(
+         id,
+         { "$set": { "sizes": update.sizes }},
+         { new: true, useFindAndModufy: false }
+      );
 
+      return "updated fields [>]"
+   } catch(err) {
+      throw err;
+   };
 };
 
 module.exports = exports;
