@@ -23,10 +23,19 @@ require('./jobs/cron');
 require('./jobs/wake_dyno');
 
 app.get('/scrape', (_req, res) => {
+   // get live data
+   require('./utils/scraper').scrapeURL()
+      .then(data => res.json(data))
+      .catch(err => { 
+         console.error(`Error occured: ${err.message}`)
+         res.redirect('/')
+      });
+
+   // -------------------------------------------------
    // send message to consumer
    // TODO: figure out how to respond with returned data
       // - potential solution - use sockets to listen for events
-   require('./workers/publisher')({ consumerType: 'request', res });
+   // require('./workers/publisher')({ consumerType: 'request', res });
 })
 
 app.get('/', (req, res) => {
