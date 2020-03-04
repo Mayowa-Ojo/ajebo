@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
 const ora = require('ora');
-const { getSneakers } = require('../database/sneaker_controller');
+const { getSneakers, updateSneaker } = require('../database/sneaker_controller');
 
 require('../config/database_config');
 // globals
@@ -61,14 +61,14 @@ const questions = {
          {
             name: 'find_one',
             type: 'input',
-            message: `Provide an id for the product: [_id or productId] \n ${glyphs.arrow}`
+            message: `Provide an id for the product: [_id or productId]<string> \n ${glyphs.arrow}`
          }
       ],
       update: [
          {
             name: 'update_id',
             type: 'input',
-            message: `Provide an id for the product: [_id or productId] \n ${glyphs.arrow}`
+            message: `Provide an id for the product: [_id or productId]<string> \n ${glyphs.arrow}`
          },
          {
             name: 'update_fields',
@@ -82,7 +82,7 @@ const questions = {
          {
             name: 'update_value',
             type: 'input',
-            message: `Enter the updated value(s): [name, [sizes]] \n ${glyphs.arrow}`
+            message: `Enter the update value(s): [name<string>, [sizes<string>]] \n ${glyphs.arrow}`
          }
       ]
    }
@@ -150,7 +150,26 @@ function readDatabase({read}) {
 function updateDatabase({update}) {
 
    prompt(update, function(answers) {
-      console.log(answers);
+      const { update_id: id, update_fields, update_value } = answers;
+      // validate data
+      switch(Boolean(0)) {
+         case validateData('id', id).isValidLength && validateData('id', id).isValidType:
+            console.log('invalid input...');
+            break;
+         case validateData('name', JSON.parse(update_value)[0]).isValidType:
+            console.log('invalid input...');
+            break;
+         case validateData('sizes', JSON.parse(update_value)[1]).isValidType && validateData('sizes', JSON.parse(update_value[1])).isNotEmpty:
+            console.log('invalid input...');
+            break;
+         default:
+            // All inputs valid: run database query
+            updateSneaker()
+               .then(res => console.log(res))
+               .catch(err => console.error(err));
+      }
+      // update database
+      return;
    });
 };
 
@@ -172,4 +191,27 @@ function loadingSpinner(text, spinner, color, prefix, successMsg) {
 
    start = ora({text, color, spinner}).start();
    return [start, stop];
+};
+
+function validateData(type=null, data) {
+   if(type == null) {
+      return new Error('must specify validator type');
+   }
+
+   if(type == 'id') {
+      const isValidLength = data.length == 5;
+      const isValidType = typeof data == 'string';
+      return {isValidLength, isValidType};
+   }
+
+   if(type == 'name') {
+      const isValidType = typeof data == 'string';
+      return isValidType;
+   }
+
+   if(type == 'sizes') {
+      const isNotEmpty = data.length > 0;
+      const isValidType = typeof data == 'object';
+      return {isNotEmpty, isValidType};
+   }
 };
