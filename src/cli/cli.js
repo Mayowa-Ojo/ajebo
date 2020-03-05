@@ -1,10 +1,12 @@
 const inquirer = require('inquirer');
 const ora = require('ora');
-const { getSneakers, updateSneaker } = require('../database/sneaker_controller');
+const { getSneakers, getSneaker, updateSneaker } = require('../database/sneaker_controller');
 
-require('../config/database_config');
+require('../config/database_config').connect('dev');
 // globals
 const args = process.argv.slice(2);
+const { log } = console;
+const { exit } = process;
 
 const glyphs = {
    search: '',
@@ -82,7 +84,7 @@ const questions = {
          {
             name: 'update_value',
             type: 'input',
-            message: `Enter the update value(s): [name<string>, [sizes<string>]] \n ${glyphs.arrow}`
+            message: `Enter the update value(s): name? <string>, sizes List<string> \n ${glyphs.arrow}`
          }
       ]
    }
@@ -100,30 +102,30 @@ prompt(questions.step_one, function(answers) {
                const { route_one } = answers;
                switch(Boolean(route_one)) {
                   case route_one.includes('create'):
-                     console.log('inserting into database...');
+                     log('inserting into database...');
                      break;
                   case route_one.includes('read'):
-                     // console.log('reading database...')
+                     // log('reading database...')
                      readDatabase(questions.step_four);
                      break;
                   case route_one.includes('update'):
-                     // console.log('updating database item...')
+                     // log('updating database item...')
                      updateDatabase(questions.step_four);
                      break;
                   case route_one.includes('delete'):
-                     console.log('deleting database item...');
+                     log('deleting database item...');
                      break;
                }
             });
          } else {
             // launch headless browser
             prompt(questions.step_three[1], function(answers) {
-               console.log('launching headless browser...');
+               log('launching headless browser...');
             });
          }
       });
    } else {
-      console.log('Here\'s a list of commands and flags with definitions');
+      log('Here\'s a list of commands and flags with definitions');
    }
 });
 
@@ -131,18 +133,32 @@ function readDatabase({read}) {
 
    prompt(read[0], function(answers) {
       if(answers.read.includes('find_one')) {
-         prompt(read[1], function(answers) {
-            console.log(`id: ${answers.find_one}`);
+         prompt(read[1], function({ find_one: id }) {
+            // validate input
+            if(!validateData('id', id).isValidLength) {
+               log('invalid input...');
+               exit(0);
+            }
+            
+            getSneaker(id).then(res => {
+               if(res == null) {
+                  log('Product not found');
+                  exit(0);
+                  // return;
+               }
+               log(res);
+               exit(0);
+            }).catch(err => console.error(`Error: ${err}`));
          });
       } else {
-         // console.log('fetching data...')
+         // log('fetching data...')
          
          getSneakers().then(res => {
-            console.log(res);
+            log(res);
             const [spinner, stop] = loadingSpinner('Fetching data...', 'dots', 'yellow', true);
             stop(spinner);
             return;
-         });
+         }).catch(err => console.error(err));
       }
    });
 };
@@ -154,18 +170,26 @@ function updateDatabase({update}) {
       // validate data
       switch(Boolean(0)) {
          case validateData('id', id).isValidLength && validateData('id', id).isValidType:
-            console.log('invalid input...');
+            log('invalid input at <id>...');
+            exit(0);
             break;
-         case validateData('name', JSON.parse(update_value)[0]).isValidType:
-            console.log('invalid input...');
+         case validateData('name', update_value[0]).isValidType:
+            log('invalid input at <name>...');
+            exit(0);
             break;
-         case validateData('sizes', JSON.parse(update_value)[1]).isValidType && validateData('sizes', JSON.parse(update_value[1])).isNotEmpty:
-            console.log('invalid input...');
+         case validateData('sizes', update_value[1]).isNotEmpty && validateData('sizes', update_value[1]).isValidType:
+            log('invalid input at <sizes>...');
+            exit(0);
             break;
          default:
+            // log(update_value.split(','))
+            const sizes = update_value.split(',');
             // All inputs valid: run database query
-            updateSneaker()
-               .then(res => console.log(res))
+            updateSneaker(id, { sizes })
+               .then(res => {
+                  log(`product updated...[>] \n ${res}`);
+                  exit(0);
+               })
                .catch(err => console.error(err));
       }
       // update database
@@ -211,7 +235,7 @@ function validateData(type=null, data) {
 
    if(type == 'sizes') {
       const isNotEmpty = data.length > 0;
-      const isValidType = typeof data == 'object';
+      const isValidType = typeof data == 'string';
       return {isNotEmpty, isValidType};
    }
 };
