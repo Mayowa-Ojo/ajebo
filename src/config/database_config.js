@@ -21,7 +21,7 @@ exports.connect = function(env) {
       useNewUrlParser: true,
       useUnifiedTopology: true
    })
-   .then(() => console.log('-- Database: connected to database'))
+   .then(() => console.log(`-- Database: connected to database in ${env}`))
    .catch(err => console.error(err));
 
 };
