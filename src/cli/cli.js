@@ -2,11 +2,17 @@ const inquirer = require('inquirer');
 const ora = require('ora');
 const { getSneakers, getSneaker, updateSneaker } = require('../database/sneaker_controller');
 
-require('../config/database_config').connect('dev');
 // globals
-const args = process.argv.slice(2);
+const args = process.argv.slice(2)[0];
 const { log } = console;
 const { exit } = process;
+
+// check node env
+if(args == '--dev') {
+   require('../config/database_config').connect('dev');
+} else {
+   require('../config/database_config').connect('prod');
+}
 
 const glyphs = {
    search: '',
@@ -100,6 +106,7 @@ prompt(questions.step_one, function(answers) {
             // prompt user to select database query
             prompt(questions.step_three[0], function(answers) {
                const { route_one } = answers;
+
                switch(Boolean(route_one)) {
                   case route_one.includes('create'):
                      log('inserting into database...');
@@ -155,9 +162,9 @@ function readDatabase({read}) {
          
          getSneakers().then(res => {
             log(res);
-            const [spinner, stop] = loadingSpinner('Fetching data...', 'dots', 'yellow', true);
+            const [spinner, stop] = loadingSpinner('Fetching data...', 'dots', 'yellow', true, '\nDone.');
             stop(spinner);
-            return;
+            // exit(0);
          }).catch(err => console.error(err));
       }
    });
@@ -197,6 +204,12 @@ function updateDatabase({update}) {
    });
 };
 
+/**
+ * 
+ * @param {object} question - prompt options 
+ * @param {function} callback - function to execute
+ * @returns {function} - return value from inquirer.prompt
+ */
 function prompt(question, callback) {
 
    return inquirer.prompt(question).then(answers => {
@@ -204,9 +217,21 @@ function prompt(question, callback) {
    });
 };
 
+/**
+ * 
+ * @param {string} text - message to display
+ * @param {string} spinner - ?type of spinner(e.g 'dots')
+ * @param {string} color - ?spinner color
+ * @param {boolean} prefix - ?show text before spinner
+ * @param {string} successMsg - ?message to pass to success method
+ * @returns {array} - array containing the start handler and stop method
+ */
 function loadingSpinner(text, spinner, color, prefix, successMsg) {
    let start;
-   let stop = (instance) => setTimeout(() => {instance.succeed(successMsg)}, 1000);
+   let stop = (instance) => setTimeout(() => {
+      instance.succeed(successMsg);
+      exit(0);
+   }, 1000);
    
    if(prefix) {
       start = ora({prefixText: text, color, spinner}).start();
@@ -217,6 +242,12 @@ function loadingSpinner(text, spinner, color, prefix, successMsg) {
    return [start, stop];
 };
 
+/**
+ * 
+ * @param {string} type - type of validation to run
+ * @param {string} data - parameter to validate
+ * @returns {object,string} - returns isValid boolean 
+ */
 function validateData(type=null, data) {
    if(type == null) {
       return new Error('must specify validator type');
