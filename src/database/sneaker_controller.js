@@ -17,7 +17,7 @@ exports.getSneakers = async function() {
  */
 exports.getSneaker = async function(id) {
    try {
-      const sneaker = await Sneaker.findById(id);
+      const sneaker = await Sneaker.findOne({ productId: id });
       return sneaker;
    } catch(err) {
       console.error(err);
@@ -47,7 +47,17 @@ exports.createSneaker = async function() {
  * update sneaker
  */
 exports.updateSneaker = async function(id, update) {
+   try {
+      await Sneaker.findOneAndUpdate(
+         { productId: id },
+         { "$set": { "sizes": update.sizes }},
+         { new: true, useFindAndModify: false }
+      );
 
+      return "updated fields [>]"
+   } catch(err) {
+      throw err;
+   };
 };
 
 module.exports = exports;
