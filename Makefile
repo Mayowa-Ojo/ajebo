@@ -6,7 +6,7 @@ dev:
 	nodemon src/server.js --dev
 # launch cli
 cli:
-	node src/cli/cli.js
+	node src/cli/cli.js $(env)
 
 # run rabbitmq consumer
 rbmq-c:
