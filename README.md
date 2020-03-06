@@ -30,6 +30,6 @@
 - [x] Load database with realtime data
 - [x] Test app in production env
 - [x] Abstract heavy tasks to workers - setup RabbitMq with amqp
-- [*] Create CLI tool for running database updates --in progress
-- [ ] Write suitable tests
+- [x] Create CLI tool for running database updates
+- [ ] Write suitable tests -- in progress
 - [ ] Deploy to production
