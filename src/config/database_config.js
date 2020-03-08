@@ -8,6 +8,7 @@ if(process.env.NODE_ENV !== 'production') {
 // globals
 const { 
    DATABASE_LOCAL_URI,
+   DATABASE_TEST_URI,
    DATABASE_USER,
    DATABASE_PASS
  } = process.env;
@@ -17,7 +18,7 @@ const CLOUD_URI = `mongodb+srv://${DATABASE_USER}:${DATABASE_PASS}@ajebo-0-nuq67
 // setup mongoose connection
 exports.connect = function(env) {
 
-   mongoose.connect(env == 'dev' ? DATABASE_LOCAL_URI : CLOUD_URI, {
+   mongoose.connect(env == 'dev' ? DATABASE_LOCAL_URI : env == 'test' ? DATABASE_TEST_URI : CLOUD_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true
    })
