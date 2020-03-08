@@ -6,7 +6,7 @@ if(process.env.NODE_ENV !== 'production') {
    require('dotenv').config();
 }
 
-const args = process.argv.slice(1);
+const args = process.argv.slice(2);
 
 const app = express();
 // Globals
@@ -15,9 +15,12 @@ const NODE_ENV = process.env.NODE_ENV;
 
 app.use(helmet());
 
-if(args[1] == '--dev') {
+if(args[0] == '--dev') {
    // connect to loacl database
    require('./config/database_config').connect('dev');
+} else if(NODE_ENV == 'test') {
+   // connect to test database
+   require('./config/database_config').connect('test');
 } else {
    // connect to cloud database
    require('./config/database_config').connect('prod');
@@ -52,10 +55,15 @@ app.get('/scrape', (_req, res) => {
 });
 
 app.get('/', (req, res) => {
-   res.send('Welcome to Ajebo 🤖️ - Bot Tracker for e-commerce')
+   res.send('Welcome to Ajebo 🤖️ - Bot Tracker for e-commerce');
 });
 
+// start server only outside test env
+if(NODE_ENV !== 'test') {
 
-app.listen(PORT, () => {
-   console.log(`-- Server: listening in ${NODE_ENV} on port: ${PORT}`);
-});
+   app.listen(PORT, () => {
+      console.log(`-- Server: listening in ${NODE_ENV} on port: ${PORT}`);
+   });
+}
+
+module.exports = app;
