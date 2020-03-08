@@ -4,6 +4,8 @@ start:
 	nodemon src/server.js
 dev:
 	nodemon src/server.js --dev
+test:
+	npm test
 # launch cli
 cli:
 	node src/cli/cli.js $(env)
