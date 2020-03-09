@@ -15,8 +15,13 @@ const connect_rmq = (callback) => {
       if(err) {
         return panic(err, connection);
       }
-      console.log('-- RabbitMQ: connected...');
+      if(process.env.NODE_ENV == 'test') {
+         callback(connection);
+         connection.close();
+         return;
+      }
 
+      console.log('-- RabbitMQ: connected...');
       callback(connection);
    });
 };
