@@ -1,6 +1,7 @@
 const request = require('supertest');
 const app = require('../src/server');
 const mongoose = require('mongoose');
+const { connect_rmq } = require('../src/config/rabbitmq_config');
 
 
 describe('test the root route', () => {
@@ -9,12 +10,10 @@ describe('test the root route', () => {
       expect(res.statusCode).toBe(200);
    });
 
-   test('it should connect to cloud database successfuly', async () => {
-
-   });
-
-   test('it should connect to cloudamqp', async () => {
-
+   test('it should connect to rabbitmq', async () => {
+      connect_rmq((connection) => {
+         expect(typeof connection).toBe('object');
+      });
    });
 
    afterAll(async (done) => {
