@@ -7,6 +7,9 @@
     "type": "git",
     "url": "https://github.com/Mayowa-Ojo/ajebo-product-tracker.git"
   },
+  "bin": {
+    "ajebo": "./src/cli/cli.js"
+  },
   "scripts": {
     "test": "jest",
     "start": "node src/server.js",
