@@ -16,6 +16,10 @@ describe('test the root route', () => {
       });
    });
 
+   test('it should connect to sendgrid', async () => {
+
+   });
+
    afterAll(async (done) => {
       await mongoose.connection.close((err) => {
          if(err) {
