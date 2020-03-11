@@ -1,3 +1,5 @@
+#!/bin/env node
+
 const inquirer = require('inquirer');
 const ora = require('ora');
 const { getSneakers, getSneaker, updateSneaker } = require('../database/sneaker_controller');
