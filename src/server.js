@@ -39,7 +39,7 @@ app.get('/scrape', (_req, res) => {
    // get live data
    require('./utils/scraper').scrapeURL()
       .then(data => res.json(data))
-      .catch(err => { 
+      .catch(err => {
          console.error(`Error occured: ${err.message}`)
          res.redirect('/')
       });
