@@ -10,7 +10,7 @@ const URL = process.env.TARGET_URL;
 
 exports.scrapeURL = async () => {
    let count = 1;
-   const shoeCount = [];
+   let shoeCount = 0;
    const data = [];
 
    const browser = await puppeteer.launch({
@@ -73,20 +73,18 @@ exports.scrapeURL = async () => {
       }, selectors);
 
       data.push(html[0]);
-      shoeCount.push(html[1][html[1].length-1]);
+      shoeCount = shoeCount + html[0].length
 
-      if(JSON.parse(shoeCount[0]) <= data.flat().length) {
-         return;
-      }
       // recurrsive condition
-      if(count < 3) {
-         count++;
+      if(shoeCount < JSON.parse(html[1][3])) { // compare shoeCount with the total displayed in toolbar
+         count++
          return await evaluate();
-      } else return;
+      }
+      return;
    })();
 
    await browser.close();
-   return data.flat();
+   return shoeCount;
 };
 
 module.exports = exports;
