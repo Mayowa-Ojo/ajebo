@@ -9,9 +9,10 @@ if(process.env.NODE_ENV !== 'production') {
 const { 
    DATABASE_LOCAL_URI,
    DATABASE_TEST_URI,
-   DATABASE_USER,
-   DATABASE_PASS
  } = process.env;
+
+const DATABASE_USER = process.env.DATABASE_USER || process.env.AJEBO_DATABASE_USER
+const DATABASE_PASS = process.env.DATABASE_PASS || process.env.AJEBO_DATABASE_PASS
 
 const CLOUD_URI = `mongodb+srv://${DATABASE_USER}:${DATABASE_PASS}@ajebo-0-nuq67.mongodb.net/ajebo?retryWrites=true&w=majority`;
 
