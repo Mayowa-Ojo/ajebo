@@ -56,8 +56,41 @@ exports.updateSneaker = async function(id, update) {
 
       return "updated fields [>]"
    } catch(err) {
-      throw err;
+      console.error(err);
+      return;
    };
 };
+
+/**
+ * 
+ * @param {object} ids - array of sneaker ids
+ * @param {object} updates - array of updates
+ */
+exports.bulkUpdateSneakers = async function(updates) {
+   if(typeof updates !== 'object') {
+      throw new Error("invalid arguments: arguments should be of type <object>")
+   }
+   
+   // loop through ids
+   for (const update of updates) {
+      try {
+         const { id, sizes } = update;
+         // format sizes
+         const formatedSizes = JSON.parse(sizes).map(size => size.toString());
+         
+         await Sneaker.findOneAndUpdate(
+            { productId: id },
+            { "$set": { "sizes": formatedSizes }},
+            { new: true, useFindAndModify: false }
+         );
+
+      } catch(err) {
+         console.error(err);
+         return;
+      }
+   }
+
+   return "updated products..."
+}
 
 module.exports = exports;
