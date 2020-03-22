@@ -2,7 +2,7 @@
 
 const inquirer = require('inquirer');
 const ora = require('ora');
-const { getSneakers, getSneaker, updateSneaker } = require('../database/sneaker_controller');
+const { getSneakers, getSneaker, updateSneaker, bulkUpdateSneakers } = require('../database/sneaker_controller');
 
 // globals
 const args = process.argv.slice(2)[0];
@@ -50,7 +50,7 @@ const questions = {
          name: 'route_one',
          type: 'list',
          message: 'Select an operation',
-         choices: [`create ${glyphs.edit}`, `read ${glyphs.search}`, `update ${glyphs.update}`, `delete ${glyphs.delete}`],
+         choices: [`create ${glyphs.edit}`, `read ${glyphs.search}`, `update ${glyphs.update}`, `update_many ${glyphs.update}`, `delete ${glyphs.delete}`],
          default: 'read'
       },
       {
@@ -94,6 +94,22 @@ const questions = {
             type: 'input',
             message: `Enter the update value(s): name? <string>, sizes List<string> \n ${glyphs.arrow}`
          }
+      ],
+      update_many: [
+         {
+            name: 'update_fields',
+            type: 'checkbox',
+            message: 'Select fields to update',
+            choices: [
+               {name: 'name'},
+               {name: 'sizes', checked: true}
+            ]
+         },
+         {
+            name: 'update_value',
+            type: 'editor',
+            message: `Enter an array of ids and update value(s): name? <string>, sizes List<string> \n ${glyphs.arrow}`
+         }
       ]
    }
 };
@@ -116,6 +132,10 @@ prompt(questions.step_one, function(answers) {
                   case route_one.includes('read'):
                      // log('reading database...')
                      readDatabase(questions.step_four);
+                     break;
+                  case route_one.includes('update_many'):
+                     // log('updating database item...')
+                     bulkUpdateDatabase(questions.step_four);
                      break;
                   case route_one.includes('update'):
                      // log('updating database item...')
@@ -196,7 +216,7 @@ function updateDatabase({update}) {
             // All inputs valid: run database query
             updateSneaker(id, { sizes })
                .then(res => {
-                  log(`product updated...[>] \n ${res}`);
+                  log(`[>] ${res}`);
                   exit(0);
                })
                .catch(err => console.error(err));
@@ -205,6 +225,44 @@ function updateDatabase({update}) {
       return;
    });
 };
+
+/*
+Data format:
+[
+   {
+      "id": "15830",
+      "sizes": "[43,45]"
+   },
+   {
+      "id": "15818",
+      "sizes": "[42]"
+   },
+   {
+      "id": "15812",
+      "sizes": "[47,44,46]"
+   }
+]
+*/
+/**
+ * update many products
+ * @param {*} param
+ */
+function bulkUpdateDatabase({update_many}) {
+
+   prompt(update_many, function(answers) {
+      const { update_value } = answers;
+      parsedData = JSON.parse(update_value);
+
+      // pass data to controller
+      bulkUpdateSneakers(parsedData)
+         .then(res => {
+            log(`[>] ${res}`);
+            exit(0);
+         })
+         .catch(err => console.error(err));
+   })
+
+}
 
 /**
  * 
