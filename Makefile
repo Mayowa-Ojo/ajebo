@@ -3,7 +3,7 @@
 start:
 	nodemon src/server.js
 dev:
-	nodemon src/server.js --dev
+	nodemon src/server.js --dev >> sample.txt
 test:
 	npm test
 # launch cli
