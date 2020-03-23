@@ -20,7 +20,7 @@ exports.checkDiff = async function(liveData = null, storedData = null) {
             return;
          }
 
-         if(foundData.productId == el_i.productId && foundData.sizes.length != el_i.sizes.length) {
+         if(foundData.sizes.length != el_i.sizes.length) {
             hasChanges.push({storedData: el_i, liveData: foundData});
          }
          return;
