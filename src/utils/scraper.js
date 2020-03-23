@@ -84,7 +84,7 @@ exports.scrapeURL = async () => {
    })();
 
    await browser.close();
-   return shoeCount;
+   return data.flat()
 };
 
 module.exports = exports;
