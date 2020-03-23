@@ -11,9 +11,9 @@ exports.generateHtml = function(_, data, rawHtml) {
       <td style="border:1px solid #333; text-align:center; width:6em; color:#dc3545;">${JSON.stringify(el.storedData.sizes)}</td>
       <td style="border:1px solid #333; text-align:center">${el.storedData.productId}</td>
       
-      <td style="border:1px solid #333; text-align:center;"><div style="width: 10em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${el.liveData.name}</div></td>
-      <td style="border:1px solid #333; text-align:center; width:6em; color:#dc3545;">${JSON.stringify(el.liveData.sizes)}</td>
-      <td style="border:1px solid #333; text-align:center">${el.liveData.productId}</td>
+      <td style="border:1px solid #333; text-align:center;"><div style="width: 10em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${el.liveData ? el.liveData.name : null}</div></td>
+      <td style="border:1px solid #333; text-align:center; width:6em; color:#dc3545;">${JSON.stringify(el.liveData ? el.liveData.sizes : null )}</td>
+      <td style="border:1px solid #333; text-align:center">${el.liveData ? el.liveData.productId : null}</td>
       </tr>
       `
 
