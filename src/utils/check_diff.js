@@ -1,6 +1,6 @@
 // compare data returned from database and data from scraper function
 const scraper = require('./scraper');
-const sneakerController = require('../database/sneaker_controller');
+const sneakerController = require('../database/sneakers/controller');
 
 exports.checkDiff = async function(liveData = null, storedData = null) {
 
