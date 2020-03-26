@@ -7,8 +7,14 @@ if(process.env.NODE_ENV !== 'production') {
 
 // globals
 const URL = process.env.TARGET_URL;
+const mapProductType = {
+   "sneakers": "shoes/sneakers",
+   "anthem-jackets": "sports/anthem-jackets",
+   "training-kits": "sports/training-kits",
+   "tracksuits": "/sports/football-tracksuits"
+}
 
-exports.scrapeURL = async () => {
+exports.scrapeURL = async (productType) => {
    let count = 1;
    let shoeCount = 0;
    const data = [];
@@ -25,7 +31,7 @@ exports.scrapeURL = async () => {
    // recurrsively load each page 
    // load url
    await (async function evaluate() {
-      await page.goto(`${URL}?p=${count}`, {waitUntil: "networkidle0"});
+      await page.goto(`${URL}${mapProductType[productType]}?p=${count}`, {waitUntil: "networkidle0"});
 
       const selectors = {
          sizes: '.product-item-details > div:nth-child(3)',
@@ -34,7 +40,7 @@ exports.scrapeURL = async () => {
 
       await page.waitForSelector(selectors.sizes);
 
-      const html = await page.evaluate((selectors) => {
+      const pageResponse = await page.evaluate((selectors) => {
          // document.querySelector("[data-product-id='16750']")
          
          const sneakers = [];
@@ -72,11 +78,16 @@ exports.scrapeURL = async () => {
 
       }, selectors);
 
-      data.push(html[0]);
-      shoeCount = shoeCount + html[0].length
+      const [sneakers , toolbar_amount] = pageResponse
+      data.push(sneakers);
+      shoeCount = shoeCount + sneakers.length
 
+      // check if all items fit in one page
+      if(toolbar_amount.length == 2) {
+         return
+      }
       // recurrsive condition
-      if(shoeCount < JSON.parse(html[1][3])) { // compare shoeCount with the total displayed in toolbar
+      if(shoeCount < JSON.parse(toolbar_amount[3])) { // compare shoeCount with the total displayed in toolbar
          count++
          return await evaluate();
       }
@@ -88,3 +99,39 @@ exports.scrapeURL = async () => {
 };
 
 module.exports = exports;
+
+// run scrape in browser console
+function browserScrape() {
+   const selectors = {
+      sizes: '.product-item-details > div:nth-child(3)',
+      names: '.product-item-details > strong.name'
+   }
+
+   const sneakers = [];
+         
+   // get sneaker sizes
+   const iterable_one = Array.from(document.querySelectorAll(selectors.sizes))
+   iterable_one.map((el) => {
+      const sneaker = {};
+      const sizes = [];
+      const iterable_two = Array.from(el.children[0].querySelector('.swatch-attribute-options').querySelectorAll('.swatch-option'));
+      const productId = el.previousElementSibling.getAttribute('data-product-id')
+      iterable_two.map(el => {
+         sizes.push(el.innerText.trim());
+      })
+      sneaker['productId'] = productId;
+      sneaker['sizes'] = sizes;
+      sneakers.push(sneaker);
+   })
+   // get sneaker name
+   const iterable_three = Array.from(document.querySelectorAll(selectors.names));
+   
+   iterable_three.map((el) => {
+      const currentId = el.nextElementSibling.getAttribute('data-product-id');
+      
+      const targetIndex = sneakers.findIndex(sneaker => sneaker.productId == currentId);
+      sneakers[targetIndex]['name'] = el.innerText.trim();
+   });
+
+   return sneakers
+}
