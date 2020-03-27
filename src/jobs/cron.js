@@ -4,7 +4,7 @@ const { checkDiff } = require('../utils/check_diff');
 const { generateHtml } = require('../utils/utils');
 
 // globals
-const cronJob = new cron.CronJob('0 */5 * * * *', function() {
+const cronJob = new cron.CronJob('0 0 */6 * * *', function() {
    // publish task to consumer every <x> hours/mins
    require('../workers/publisher')({ consumerType: 'cron' });
 }, null, true, 'America/Los_Angeles');
@@ -57,20 +57,19 @@ module.exports = runCron = () => {
             html += generateHtml`${res[categories[i]]} ${rawHtml(categories[i])}`;
          }
 
-         console.log(html)
-         // const message = {
-         //    from: '"Ajebo Tracker[bot]" <mayowaojo.e@gmail.com>',
-         //    to: '"Mayowa Ojo" <ojomayowa.e@gmail.com>',
-         //    subject: 'Notifier: I found changes',
-         //    text: `Placeholder text - error occured generating html`,
-         //    html
-         // };
-         // // console.log(res.length)
-         // if(res.length > 0) {
-         //    // send email if check diff function returns changes
-         //    sendMail(message);
-         //    return;
-         // } return;
+         const message = {
+            from: '"Ajebo Tracker[bot]" <mayowaojo.e@gmail.com>',
+            to: '"Mayowa Ojo" <ojomayowa.e@gmail.com>',
+            subject: 'Notifier: I found changes',
+            text: `Placeholder text - error occured generating html`,
+            html
+         };
+         // console.log(res.length)
+         if(res.length > 0) {
+            // send email if check diff function returns changes
+            sendMail(message);
+            return;
+         } return;
       })
       .catch(err => console.error(err))
    )
