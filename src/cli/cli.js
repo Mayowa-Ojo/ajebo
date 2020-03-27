@@ -2,7 +2,7 @@
 
 const inquirer = require('inquirer');
 const ora = require('ora');
-const { getSneakers, getSneaker, updateSneaker, bulkUpdateSneakers } = require('../database/sneaker_controller');
+const { getSneakers, getSneaker, updateSneaker, bulkUpdateSneakers } = require('../database/sneakers/controller');
 
 // globals
 const args = process.argv.slice(2)[0];

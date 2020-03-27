@@ -1,9 +1,12 @@
 # terminal commands:
 # start development server
+
+pipe = >> sample.txt
+
 start:
 	nodemon src/server.js
 dev:
-	nodemon src/server.js --dev >> sample.txt
+	nodemon src/server.js --dev ${$(arg)}
 test:
 	npm test
 # launch cli

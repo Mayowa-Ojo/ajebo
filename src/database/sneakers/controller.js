@@ -1,4 +1,4 @@
-const Sneaker = require('./sneaker_model');
+const Sneaker = require('./model');
 
 /**
  * get all sneakers

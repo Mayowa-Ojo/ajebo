@@ -12,10 +12,11 @@ const cronJob = new cron.CronJob('0 0 */6 * * *', function() {
 cronJob.start();
 
 module.exports = runCron = () => {
-   const rawHtml = `
+   const rawHtml = (category) => {
+   return `
    <h3>New Update from Ajebo Tracker 🤖️</h3>
    *
-   <p>Hi Mayowa, I found some changes in sneaker sizes since last update. Details below</p>
+   <p>Hi Mayowa, I found some changes in ${category} sizes since last update. Details below</p>
    *
    <table style="width:45em; border:1px solid #333;">
    *
@@ -38,11 +39,24 @@ module.exports = runCron = () => {
    *
    </table>
    `;
+   }
+
+   const categories = [
+      "sneakers",
+      "anthem-jackets",
+      "training-kits",
+      "tracksuits"
+   ]
 
    return Promise.resolve(
       checkDiff().then(res => {
+         let html;
          // generate dynamic html using tagged templates
-         const html = generateHtml`${res} ${rawHtml}`;
+         for(let i = 0; i < categories.length; i++) {
+
+            html += generateHtml`${res[categories[i]]} ${rawHtml(categories[i])}`;
+         }
+
          const message = {
             from: '"Ajebo Tracker[bot]" <mayowaojo.e@gmail.com>',
             to: '"Mayowa Ojo" <ojomayowa.e@gmail.com>',
