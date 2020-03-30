@@ -38,7 +38,7 @@ exports.scrapeURL = async (productType) => {
          names: '.product-item-details > strong.name'
       }
 
-      await page.waitForSelector(selectors.sizes);
+      await page.waitForSelector(selectors.sizes, {timeout: 0});
 
       const pageResponse = await page.evaluate((selectors) => {
          // document.querySelector("[data-product-id='16750']")
