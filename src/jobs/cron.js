@@ -52,11 +52,12 @@ module.exports = runCron = () => {
       checkDiff().then(res => {
          let html;
          // generate dynamic html using tagged templates
-         for(let i = 0; i < categories.length; i++) {
+         // temporary change - run loop just once
+         for(let i = 0; i < 1; i++) {
 
             html += generateHtml`${res[categories[i]]} ${rawHtml(categories[i])}`;
          }
-
+         // console.log(html)
          const message = {
             from: '"Ajebo Tracker[bot]" <mayowaojo.e@gmail.com>',
             to: '"Mayowa Ojo" <ojomayowa.e@gmail.com>',
@@ -64,7 +65,7 @@ module.exports = runCron = () => {
             text: `Placeholder text - error occured generating html`,
             html
          };
-         // console.log(res.length)
+         // // console.log(res.length)
          if(res.length > 0) {
             // send email if check diff function returns changes
             sendMail(message);
