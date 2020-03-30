@@ -1,7 +1,7 @@
 # terminal commands:
 # start development server
 
-pipe = >> sample.txt
+pipe = >> _.txt
 
 start:
 	nodemon src/server.js
