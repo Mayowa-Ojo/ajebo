@@ -8,7 +8,7 @@ const fetch = require('node-fetch');
 (() => {
    const cronJob = new cron.CronJob('0 */25 * * * *', function() {
       fetch('https://ajebo.herokuapp.com/')
-         .then(res => console.log(`response - ${res.ok}, status - ${res.status}`))
+         .then(res => console.log(`response - ${res.ok}, status - ${res.status}, timestamp - ${new Date}`))
          .catch(err => console.error(err.message));
    });
 
