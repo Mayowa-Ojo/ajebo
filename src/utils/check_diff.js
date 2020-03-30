@@ -22,8 +22,8 @@ exports.checkDiff = async function(liveData = null, storedData = null) {
       getTrainingKits,
       getTrackSuits
    ];
-
-   for(let i = 0; i < categories.length; i++) {
+   // temporary - run only one loop for sneakers.
+   for(let i = 0; i < 1; i++) {
 
       try {
          if(!liveData && !storedData) {

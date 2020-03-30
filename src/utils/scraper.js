@@ -31,7 +31,7 @@ exports.scrapeURL = async (productType) => {
    // recurrsively load each page 
    // load url
    await (async function evaluate() {
-      await page.goto(`${URL}${mapProductType[productType]}?p=${count}`, {waitUntil: "networkidle0"});
+      await page.goto(`${URL}${mapProductType[productType]}?p=${count}`, {waitUntil: "networkidle0", timeout: 0});
 
       const selectors = {
          sizes: '.product-item-details > div:nth-child(3)',
