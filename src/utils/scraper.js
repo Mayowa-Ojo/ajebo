@@ -32,14 +32,14 @@ exports.scrapeURL = async (productType) => {
    // load url
    await (async function evaluate() {
       console.log(`${URL}${mapProductType[productType]}?p=${count}`)
-      await page.goto(`${URL}${mapProductType[productType]}?p=${count}`, {waitUntil: "networkidle0", timeout: 360000});
+      await page.goto(`${URL}${mapProductType[productType]}?p=${count}`, {waitUntil: "networkidle0", timeout: 720000});
 
       const selectors = {
          sizes: '.product-item-details > div:nth-child(3)',
          names: '.product-item-details > strong.name'
       }
 
-      await page.waitForSelector(selectors.sizes, {timeout: 360000});
+      await page.waitForSelector(selectors.sizes, {timeout: 720000});
 
       const pageResponse = await page.evaluate((selectors) => {
          // document.querySelector("[data-product-id='16750']")
