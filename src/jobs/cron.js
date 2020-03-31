@@ -50,7 +50,7 @@ module.exports = runCron = () => {
 
    return Promise.resolve(
       checkDiff().then(res => {
-         let html;
+         let html = "";
          // generate dynamic html using tagged templates
          // temporary change - run loop just once
          for(let i = 0; i < 1; i++) {
