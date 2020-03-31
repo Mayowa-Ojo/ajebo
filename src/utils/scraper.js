@@ -31,14 +31,15 @@ exports.scrapeURL = async (productType) => {
    // recurrsively load each page 
    // load url
    await (async function evaluate() {
-      await page.goto(`${URL}${mapProductType[productType]}?p=${count}`, {waitUntil: "networkidle0", timeout: 0});
+      console.log(`${URL}${mapProductType[productType]}?p=${count}`)
+      await page.goto(`${URL}${mapProductType[productType]}?p=${count}`, {waitUntil: "networkidle0", timeout: 360000});
 
       const selectors = {
          sizes: '.product-item-details > div:nth-child(3)',
          names: '.product-item-details > strong.name'
       }
 
-      await page.waitForSelector(selectors.sizes, {timeout: 0});
+      await page.waitForSelector(selectors.sizes, {timeout: 360000});
 
       const pageResponse = await page.evaluate((selectors) => {
          // document.querySelector("[data-product-id='16750']")
