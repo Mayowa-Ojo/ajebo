@@ -4,6 +4,7 @@ const runCron = require('../jobs/cron');
 // connect to RabbitMQ server
 connect_rmq(connection => {
    
+   // spin up multiple consumers
    // create consumer channel
    connection.createChannel((err, channel) => {
       if(err) {
@@ -22,8 +23,8 @@ connect_rmq(connection => {
          if(message.content.toString() == 'cron') {
             runCron()
                .then(_ => {
-               console.log(`-- RabbitMQ: process executed in ${queue} - message: ${message.content.toString()}`);
-               channel.ack(message);
+                  console.log(`-- RabbitMQ: process executed in ${queue} - message: ${message.content.toString()}`);
+                  channel.ack(message);
                })
                .catch(err => console.error(err));
          } else if(message.content.toString() == 'request') {
