@@ -7,16 +7,12 @@ const { getTrackSuits } = require('../database/tracksuits/controller');
 
 exports.checkDiff = async function(category, liveData = null, storedData = null) {
 
-   // const diff = {};
-
    const controllers = {
       "sneakers": getSneakers,
       "anthem-jackets": getAnthemJackets,
       "training-kits": getTrainingKits,
       "tracksuits": getTrackSuits
    };
-   // temporary - run only one loop for sneakers.
-   // for(let i = 0; i < 1; i++) {
 
    try {
       if(!liveData && !storedData) {
@@ -47,10 +43,6 @@ exports.checkDiff = async function(category, liveData = null, storedData = null)
 
       return;
    };
-
-   // }
-
-   // return diff;
 };
 
 module.exports = exports;
