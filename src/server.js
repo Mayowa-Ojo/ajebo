@@ -26,7 +26,7 @@ if(args[0] == '--dev') {
    require('./config/database_config').connect('prod');
    
    // connect to RabbitMQ and start consumer
-   require('./workers/consumer');
+   require('./utils/execute_consumers');
    
    // start cron job
    require('./jobs/cron');
