@@ -1,5 +1,6 @@
 const express = require('express');
 const helmet = require('helmet');
+const { initializeCounter } = require('./cache/redis_cache');
 
 // check Node env
 if(process.env.NODE_ENV !== 'production') {
@@ -27,12 +28,18 @@ if(args[0] == '--dev') {
    
    // connect to RabbitMQ and start consumer
    require('./utils/execute_consumers');
+
+   // connect to redis
+   require('./config/redis_config');
    
    // start cron job
    require('./jobs/cron');
    
    // start wake-dyno cron
    require('./jobs/wake_dyno');
+
+   // set counter variable
+   initializeCounter();
 }
 
 app.get('/scrape', (_req, res) => {
