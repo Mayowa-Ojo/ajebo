@@ -6,13 +6,14 @@ module.exports = (function({ consumerType }) {
    connect_rmq(connection => {
       
       // create consumer channel
+
       connection.createChannel((err, channel) => {
          if(err) {
             return panic(err, connection);
          }
          
          let content;
-
+         
          if(consumerType == 'cron') {
             content = 'cron';
          } else if(consumerType == 'request') {
