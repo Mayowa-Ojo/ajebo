@@ -1,3 +1,4 @@
+const process = require("child_process");
 const { connect_rmq, panic } = require('../../config/rabbitmq_config');
 // const runCron = require('../jobs/cron');
 const { fetchScrapeData, cleanUp } = require("../../cache/redis_cache");
@@ -18,14 +19,19 @@ connect_rmq(connection => {
 
       console.log(`-- RabbitMQ: waiting for queue, ${queue}: To exit press CTRL+C`);
 
-      channel.consume(queue, (message) => {
+      channel.consume(queue, async (message) => {
 
          // check type of message sent
          if(message.content.toString() == 'mail') {
             // fetch and aggregate data from redis cache
-            const data = fetchScrapeData();
+            const data = await fetchScrapeData();
             // call sendMail function
+
             sendMail(data);
+            
+            console.log(`-- RabbitMQ: process executed in ${queue} - message: ${message.content.toString()}`);
+            channel.ack(message);
+
             // run clean up
             cleanUp();
          }
