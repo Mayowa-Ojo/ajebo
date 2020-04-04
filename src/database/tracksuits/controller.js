@@ -5,7 +5,7 @@ const TrackSuit = require('./model');
  */
 exports.getTrackSuits = async function() {
    try {
-      const trackSuits = await TrackSuit.find();
+      const trackSuits = await TrackSuit.find({ stock: { $eq: "in-stock" }});
       return trackSuits;
    } catch(err) {
       console.error(err);
