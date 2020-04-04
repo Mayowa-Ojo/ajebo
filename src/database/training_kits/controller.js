@@ -5,7 +5,7 @@ const TrainingKit = require('./model');
  */
 exports.getTrainingKits = async function() {
    try {
-      const trainingKits = await TrainingKit.find();
+      const trainingKits = await TrainingKit.find({ stock: { $eq: "in-stock" }});
       return trainingKits;
    } catch(err) {
       console.error(err);
