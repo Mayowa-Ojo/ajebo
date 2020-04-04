@@ -12,6 +12,12 @@ const anthemJacketSchema = new mongoose.Schema({
    productId: {
       type: String,
       required: true
+   },
+   stock: {
+      type: String,
+      enum: ["in-stock", "out-of-stock"],
+      required: true,
+      default: "in-stock"
    }
 });
 
