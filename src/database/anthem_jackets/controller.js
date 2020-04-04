@@ -5,7 +5,7 @@ const AnthemJacket = require('./model');
  */
 exports.getAnthemJackets = async function() {
    try {
-      const anthemJackets = await AnthemJacket.find();
+      const anthemJackets = await AnthemJacket.find({ stock: { $eq: "in-stock" }});
       return anthemJackets;
    } catch(err) {
       console.error(err);
