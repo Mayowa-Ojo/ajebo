@@ -5,7 +5,7 @@ const Sneaker = require('./model');
  */
 exports.getSneakers = async function() {
    try {
-      const sneakers = await Sneaker.find();
+      const sneakers = await Sneaker.find({ stock: { $eq: "in-stock" }});
       return sneakers;
    } catch(err) {
       console.error(err);
