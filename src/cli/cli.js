@@ -2,7 +2,13 @@
 
 const inquirer = require('inquirer');
 const ora = require('ora');
-const { getSneakers, getSneaker, updateSneaker, bulkUpdateSneakers } = require('../database/sneakers/controller');
+const { 
+   getSneakers, 
+   getSneaker, 
+   updateSneaker,
+   bulkUpdateSneakers, 
+   updateAllSneakers 
+} = require('../database/sneakers/controller');
 
 // globals
 const args = process.argv.slice(2)[0];
@@ -50,7 +56,14 @@ const questions = {
          name: 'route_one',
          type: 'list',
          message: 'Select an operation',
-         choices: [`create ${glyphs.edit}`, `read ${glyphs.search}`, `update ${glyphs.update}`, `update_many ${glyphs.update}`, `delete ${glyphs.delete}`],
+         choices: [
+            `create ${glyphs.edit}`,
+            `read ${glyphs.search}`,
+            `update ${glyphs.update}`,
+            `update_many ${glyphs.update}`,
+            `update_all ${glyphs.update}`,
+            `delete ${glyphs.delete}`
+         ],
          default: 'read'
       },
       {
@@ -112,6 +125,23 @@ const questions = {
             type: 'editor',
             message: `Enter an array of ids and update value(s): name? <string>, sizes List<string> \n ${glyphs.arrow}`
          }
+      ],
+      update_all: [
+         {
+            name: 'update_fields',
+            type: 'checkbox',
+            message: 'Select fields to update',
+            choices: [
+               {name: 'name'},
+               {name: 'sizes', checked: true},
+               {name: 'stock'}
+            ]
+         },
+         {
+            name: 'update_value',
+            type: 'input',
+            message: `Enter the update value(s): name? <string>, sizes List<string> \n ${glyphs.arrow}`
+         }
       ]
    }
 };
@@ -138,6 +168,10 @@ prompt(questions.step_one, function(answers) {
                   case route_one.includes('update_many'):
                      // log('updating database item...')
                      bulkUpdateDatabase(questions.step_four);
+                     break;
+                  case route_one.includes('update_all'):
+                     // log('updating database item...')
+                     updateAll(questions.step_four);
                      break;
                   case route_one.includes('update'):
                      // log('updating database item...')
@@ -273,8 +307,23 @@ function bulkUpdateDatabase({update_many}) {
             exit(0);
          })
          .catch(err => console.error(err));
-   })
+   });
+}
 
+function updateAll({update_all}) {
+
+   prompt(update_all, function(answers) {
+      const { update_fields, update_value } = answers;
+
+      const update = update_fields == 'sizes' ? update_value.split(',') : update_value
+      
+      updateAllSneakers(update_fields, update)
+         .then(res => {
+            log(`[>] ${res}`);
+            exit(0);
+         })
+         .catch(err => console.error(err));
+   });
 }
 
 /**
