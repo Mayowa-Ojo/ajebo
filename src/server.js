@@ -31,7 +31,7 @@ if(args[0] == '--dev') {
 
    // connect to redis
    require('./config/redis_config');
-   
+
    // start cron job
    require('./jobs/cron');
    
