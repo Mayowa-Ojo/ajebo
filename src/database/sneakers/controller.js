@@ -46,11 +46,11 @@ exports.createSneaker = async function() {
 /**
  * update sneaker
  */
-exports.updateSneaker = async function(id, update) {
+exports.updateSneaker = async function(id, field, update) { // TODO: add field parameter
    try {
       await Sneaker.findOneAndUpdate(
          { productId: id },
-         { "$set": { "sizes": update.sizes }},
+         { "$set": { [field]: update }},
          { new: true, useFindAndModify: false }
       );
 
@@ -66,7 +66,7 @@ exports.updateSneaker = async function(id, update) {
  * @param {object} ids - array of sneaker ids
  * @param {object} updates - array of updates
  */
-exports.bulkUpdateSneakers = async function(updates) {
+exports.bulkUpdateSneakers = async function(field, updates) {
    if(typeof updates !== 'object') {
       throw new Error("invalid arguments: arguments should be of type <object>")
    }
@@ -74,13 +74,13 @@ exports.bulkUpdateSneakers = async function(updates) {
    // loop through ids
    for (const update of updates) {
       try {
-         const { id, sizes } = update;
-         // format sizes
-         const formatedSizes = JSON.parse(sizes).map(size => size.toString());
-         
+         const { id } = update;
+         let value = field == 'sizes' ? JSON.parse(update.sizes).map(size => size.toString()) : update.stock;
+
+         console.log(value)
          await Sneaker.findOneAndUpdate(
             { productId: id },
-            { "$set": { "sizes": formatedSizes }},
+            { "$set": { [field]: value }},
             { new: true, useFindAndModify: false }
          );
 
@@ -91,6 +91,19 @@ exports.bulkUpdateSneakers = async function(updates) {
    }
 
    return "updated products..."
+}
+
+exports.updateAllSneakers = async function(field, update) {
+
+   try {
+
+      const res = await Sneaker.updateMany({}, { "$set": { [field]: update }}, { new: true, useFindAndModify: false });
+      console.log(res)
+      return "updated products..."
+   } catch(err) {
+      console.error(err);
+      return;
+   }
 }
 
 module.exports = exports;
