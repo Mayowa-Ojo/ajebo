@@ -86,7 +86,8 @@ const questions = {
             message: 'Select fields to update',
             choices: [
                {name: 'name'},
-               {name: 'sizes', checked: true}
+               {name: 'sizes', checked: true},
+               {name: 'stock'}
             ]
          },
          {
@@ -102,7 +103,8 @@ const questions = {
             message: 'Select fields to update',
             choices: [
                {name: 'name'},
-               {name: 'sizes', checked: true}
+               {name: 'sizes', checked: true},
+               {name: 'stock'}
             ]
          },
          {
@@ -211,10 +213,11 @@ function updateDatabase({update}) {
             exit(0);
             break;
          default:
-            // log(update_value.split(','))
-            const sizes = update_value.split(',');
+            const update = update_fields == 'sizes' ? update_value.split(',') : update_value
+            
             // All inputs valid: run database query
-            updateSneaker(id, { sizes })
+            console.log(`update-field: ${update_fields}, update: ${update}`)
+            updateSneaker(id, update_fields, update)
                .then(res => {
                   log(`[>] ${res}`);
                   exit(0);
@@ -242,6 +245,16 @@ Data format:
       "sizes": "[47,44,46]"
    }
 ]
+[
+   {
+      "id": "15830",
+      "stock": "out-of-stock"
+   },
+   {
+      "id": "15818",
+      "stock": "out-of-stock"
+   }
+]
 */
 /**
  * update many products
@@ -250,11 +263,11 @@ Data format:
 function bulkUpdateDatabase({update_many}) {
 
    prompt(update_many, function(answers) {
-      const { update_value } = answers;
+      const { update_fields, update_value } = answers;
       parsedData = JSON.parse(update_value);
 
       // pass data to controller
-      bulkUpdateSneakers(parsedData)
+      bulkUpdateSneakers(update_fields, parsedData)
          .then(res => {
             log(`[>] ${res}`);
             exit(0);
