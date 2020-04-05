@@ -1,6 +1,15 @@
 const redis = require("redis");
 
-const client = redis.createClient();
+let client;
+// check Node env
+if(process.env.NODE_ENV !== 'production') {
+
+   require('dotenv').config();
+   client = redis.createClient(process.env.REDIS_URL);
+} else {
+
+   client = redis.createClient();
+}
 
 (function() {
 
