@@ -2,13 +2,10 @@
 
 const inquirer = require('inquirer');
 const ora = require('ora');
-const { 
-   getSneakers, 
-   getSneaker, 
-   updateSneaker,
-   bulkUpdateSneakers, 
-   updateAllSneakers 
-} = require('../database/sneakers/controller');
+const sneakerControllers = require('../database/sneakers/controller');
+const anthemJacketControllers = require("../database/anthem_jackets/controller");
+const trainingKitControllers = require("../database/training_kits/controller");
+const tracksuitControllers = require("../database/tracksuits/controller");
 
 // globals
 const args = process.argv.slice(2)[0];
@@ -74,7 +71,14 @@ const questions = {
    ],
    step_four: {
       read: [
-         { 
+         {
+            name: 'category', 
+            type: 'list', 
+            message: 'Select a product category.', 
+            choices: ['sneakers', 'anthem-jackets', 'tracksuits', 'training-kits'], 
+            default: 'sneakers'
+         },
+         {
             name: 'read', 
             type: 'list', 
             message: 'Do you want to run a find_one or find_all command? ', 
@@ -88,6 +92,13 @@ const questions = {
          }
       ],
       update: [
+         {
+            name: 'category', 
+            type: 'list', 
+            message: 'Select a product category.', 
+            choices: ['sneakers', 'anthem-jackets', 'tracksuits', 'training-kits'], 
+            default: 'sneakers'
+         },
          {
             name: 'update_id',
             type: 'input',
@@ -111,6 +122,13 @@ const questions = {
       ],
       update_many: [
          {
+            name: 'category', 
+            type: 'list', 
+            message: 'Select a product category.', 
+            choices: ['sneakers', 'anthem-jackets', 'tracksuits', 'training-kits'], 
+            default: 'sneakers'
+         },
+         {
             name: 'update_fields',
             type: 'checkbox',
             message: 'Select fields to update',
@@ -127,6 +145,13 @@ const questions = {
          }
       ],
       update_all: [
+         {
+            name: 'category', 
+            type: 'list', 
+            message: 'Select a product category.', 
+            choices: ['sneakers', 'anthem-jackets', 'tracksuits', 'training-kits'], 
+            default: 'sneakers'
+         },
          {
             name: 'update_fields',
             type: 'checkbox',
@@ -197,41 +222,52 @@ prompt(questions.step_one, function(answers) {
 function readDatabase({read}) {
 
    prompt(read[0], function(answers) {
-      if(answers.read.includes('find_one')) {
-         prompt(read[1], function({ find_one: id }) {
-            // validate input
-            if(!validateData('id', id).isValidLength) {
-               log('invalid input...');
-               exit(0);
-            }
-            
-            getSneaker(id).then(res => {
-               if(res == null) {
-                  log('Product not found');
+      const category = answers.category;
+
+      prompt(read[1], function(answers) {
+
+         if(answers.read.includes('find_one')) {
+
+            const controller = mapCategoryToController("read", category);
+
+            prompt(read[2], function({ find_one: id }) {
+               // validate input
+               if(!validateData('id', id).isValidLength) {
+                  log('invalid input...');
                   exit(0);
-                  // return;
                }
-               log(res);
-               exit(0);
-            }).catch(err => console.error(`Error: ${err}`));
-         });
-      } else {
-         // log('fetching data...')
+               
+               controller(id).then(res => {
+                  if(res == null) {
+                     log('Product not found');
+                     exit(0);
+                     // return;
+                  }
+                  log(res);
+                  exit(0);
+               }).catch(err => console.error(`Error: ${err}`));
+            });
+         } 
          
-         getSneakers().then(res => {
-            log(res);
-            const [spinner, stop] = loadingSpinner('Fetching data...', 'dots', 'yellow', true, '\nDone.');
-            stop(spinner);
-            // exit(0);
-         }).catch(err => console.error(err));
-      }
+         if(answers.read.includes('find_all')) {
+            const controller = mapCategoryToController("readAll", category)
+            
+            controller().then(res => {
+               log(res);
+               const [spinner, stop] = loadingSpinner('Fetching data...', 'dots', 'yellow', true, '\nDone.');
+               stop(spinner);
+               // exit(0);
+            }).catch(err => console.error(err));
+         }
+      })
    });
 };
 
 function updateDatabase({update}) {
 
    prompt(update, function(answers) {
-      const { update_id: id, update_fields, update_value } = answers;
+      const { category, update_id: id, update_fields, update_value } = answers;
+      const controller = mapCategoryToController("update", category);
       // validate data
       switch(Boolean(0)) {
          case validateData('id', id).isValidLength && validateData('id', id).isValidType:
@@ -251,7 +287,7 @@ function updateDatabase({update}) {
             
             // All inputs valid: run database query
             console.log(`update-field: ${update_fields}, update: ${update}`)
-            updateSneaker(id, update_fields, update)
+            controller(id, update_fields, update)
                .then(res => {
                   log(`[>] ${res}`);
                   exit(0);
@@ -297,11 +333,12 @@ Data format:
 function bulkUpdateDatabase({update_many}) {
 
    prompt(update_many, function(answers) {
-      const { update_fields, update_value } = answers;
+      const { category, update_fields, update_value } = answers;
+      const controller = mapCategoryToController("bulkUpdate", category);
       parsedData = JSON.parse(update_value);
 
       // pass data to controller
-      bulkUpdateSneakers(update_fields, parsedData)
+      controller(update_fields, parsedData)
          .then(res => {
             log(`[>] ${res}`);
             exit(0);
@@ -313,11 +350,11 @@ function bulkUpdateDatabase({update_many}) {
 function updateAll({update_all}) {
 
    prompt(update_all, function(answers) {
-      const { update_fields, update_value } = answers;
-
+      const { category, update_fields, update_value } = answers;
+      const controller = mapCategoryToController("updateAll", category);
       const update = update_fields == 'sizes' ? update_value.split(',') : update_value
       
-      updateAllSneakers(update_fields, update)
+      controller(update_fields, update)
          .then(res => {
             log(`[>] ${res}`);
             exit(0);
@@ -392,3 +429,40 @@ function validateData(type=null, data) {
       return {isNotEmpty, isValidType};
    }
 };
+
+function mapCategoryToController(query, category) {
+   const categories = {
+      read: {
+         "sneakers": sneakerControllers.getSneaker,
+         "anthem-jackets": anthemJacketControllers.getAnthemJacket,
+         "training-kits": trainingKitControllers.getTrainingKit,
+         "tracksuits": tracksuitControllers.getTrackSuit
+      },
+      readAll: {
+         "sneakers": sneakerControllers.getSneakers,
+         "anthem-jackets": anthemJacketControllers.getAnthemJackets,
+         "training-kits": trainingKitControllers.getTrainingKits,
+         "tracksuits": tracksuitControllers.getTrackSuits
+      },
+      update: {
+         "sneakers": sneakerControllers.updateSneaker,
+         "anthem-jackets": anthemJacketControllers.updateAnthemJacket,
+         "training-kits": trainingKitControllers.updateTrainingKit,
+         "tracksuits": tracksuitControllers.updateTrackSuit
+      },
+      updateAll: {
+         "sneakers": sneakerControllers.updateAllSneakers,
+         "anthem-jackets": anthemJacketControllers.updateAllAnthemJackets,
+         "training-kits": trainingKitControllers.updateAllTrainingKits,
+         "tracksuits": tracksuitControllers.updateAllTracksuits
+      },
+      bulkUpdate: {
+         "sneakers": sneakerControllers.bulkUpdateSneakers,
+         "anthem-jackets": anthemJacketControllers.bulkUpdateAnthemJackets,
+         "training-kits": trainingKitControllers.bulkUpdateTrainingKits,
+         "tracksuits": tracksuitControllers.bulkUpdateTrackSuits
+      }
+   }
+
+   return categories[query][category];
+}
