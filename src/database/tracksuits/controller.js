@@ -74,13 +74,13 @@ exports.bulkUpdateTrackSuits = async function(updates) {
    // loop through ids
    for (const update of updates) {
       try {
-         const { id, sizes } = update;
-         // format sizes
-         const formatedSizes = JSON.parse(sizes).map(size => size.toString());
-         
+         const { id } = update;
+         let value = field == 'sizes' ? JSON.parse(update.sizes).map(size => size.toString()) : update.stock;
+
+         console.log(value)
          await TrackSuit.findOneAndUpdate(
             { productId: id },
-            { "$set": { "sizes": formatedSizes }},
+            { "$set": { [field]: value }},
             { new: true, useFindAndModify: false }
          );
 
@@ -91,6 +91,19 @@ exports.bulkUpdateTrackSuits = async function(updates) {
    }
 
    return "updated products..."
+}
+
+exports.updateAllTracksuits = async function(field, update) {
+
+   try {
+
+      const res = await TrackSuit.updateMany({}, { "$set": { [field]: update }}, { new: true, useFindAndModify: false });
+      console.log(res)
+      return "updated products..."
+   } catch(err) {
+      console.error(err);
+      return;
+   }
 }
 
 module.exports = exports;
