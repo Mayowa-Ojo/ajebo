@@ -46,11 +46,11 @@ exports.createAnthemJacket = async function() {
 /**
  * update sneaker
  */
-exports.updateAnthemJacket = async function(id, update) {
+exports.updateAnthemJacket = async function(id, field, update) {
    try {
       await AnthemJacket.findOneAndUpdate(
          { productId: id },
-         { "$set": { "sizes": update.sizes }},
+         { "$set": { [field]: update }},
          { new: true, useFindAndModify: false }
       );
 

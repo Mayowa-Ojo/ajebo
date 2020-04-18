@@ -46,11 +46,11 @@ exports.createTrackSuit = async function() {
 /**
  * update sneaker
  */
-exports.updateTrackSuit = async function(id, update) {
+exports.updateTrackSuit = async function(id, field, update) {
    try {
       await TrackSuit.findOneAndUpdate(
          { productId: id },
-         { "$set": { "sizes": update.sizes }},
+         { "$set": { [field]: update }},
          { new: true, useFindAndModify: false }
       );
 

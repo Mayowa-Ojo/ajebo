@@ -46,11 +46,11 @@ exports.createTrainingKit = async function() {
 /**
  * update sneaker
  */
-exports.updateTrainingKit = async function(id, update) {
+exports.updateTrainingKit = async function(id, field, update) {
    try {
       await TrainingKit.findOneAndUpdate(
          { productId: id },
-         { "$set": { "sizes": update.sizes }},
+         { "$set": { [field]: update }},
          { new: true, useFindAndModify: false }
       );
 
