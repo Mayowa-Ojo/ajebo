@@ -413,7 +413,7 @@ function validateData(type=null, data) {
    }
 
    if(type == 'id') {
-      const isValidLength = data.length == 4;
+      const isValidLength = data.length == 4 || data.length == 5;
       const isValidType = typeof data == 'string';
       return {isValidLength, isValidType};
    }
