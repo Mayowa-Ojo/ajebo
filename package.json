@@ -33,7 +33,7 @@
     "chalk": "^3.0.0",
     "cheerio": "^1.0.0-rc.3",
     "cron": "^1.8.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "helmet": "^3.21.2",
     "inquirer": "^7.0.4",
     "mongoose": "^5.9.14",
